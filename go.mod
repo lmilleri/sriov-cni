@@ -6,9 +6,10 @@ require (
 	github.com/containernetworking/cni v1.1.2
 	github.com/containernetworking/plugins v1.2.0
 	github.com/k8snetworkplumbingwg/cni-log v0.0.0-20230801160229-b6e062c9e0f2
+	github.com/k8snetworkplumbingwg/govdpa v0.1.4
 	github.com/onsi/ginkgo/v2 v2.9.2
 	github.com/onsi/gomega v1.27.5
-	github.com/stretchr/testify v1.6.1
+	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netlink v1.2.1-beta.2.0.20230905152006-63484bbf69f8
 	golang.org/x/net v0.17.0
 )

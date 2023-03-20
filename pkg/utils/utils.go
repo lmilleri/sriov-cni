@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	vdpa "github.com/k8snetworkplumbingwg/govdpa/pkg/kvdpa"
 	"net"
 	"os"
 	"path/filepath"
@@ -233,6 +234,29 @@ func HasDpdkDriver(pciAddr string) (bool, error) {
 			return true, nil
 		}
 	}
+
+	/* If there is a vdpa device associated with the device and it is bound to
+	vhost-vdpa driver, it shall be treated as a dpdk device
+	*/
+
+	// the govdpa library requires the pci address to include the "pci/" prefix
+	fullPciAddr := "pci/" + pciAddr
+	vdpaDevices, err := vdpa.GetVdpaDevicesByPciAddress(fullPciAddr)
+	if err != nil {
+		return false, err
+	}
+	numVdpaDevices := len(vdpaDevices)
+	if numVdpaDevices == 0 {
+		return false, fmt.Errorf("no vdpa device associated to pciAddress %s", pciAddr)
+	}
+	/* if numVdpaDevices > 1 {
+		glog.Infof("More than one vDPA device found for pciAddress %s, returning the first one", pciAddr)
+	} */
+
+	if vdpaDevices[0].Driver() == vdpa.VhostVdpaDriver {
+		return true, nil
+	}
+
 	return false, nil
 }
 
