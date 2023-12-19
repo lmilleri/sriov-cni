@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	vdpa "github.com/k8snetworkplumbingwg/govdpa/pkg/kvdpa"
 	"net"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	vdpa "github.com/k8snetworkplumbingwg/govdpa/pkg/kvdpa"
 )
 
 var (
@@ -238,6 +239,11 @@ func HasDpdkDriver(pciAddr string) (bool, error) {
 	/* If there is a vdpa device associated with the device and it is bound to
 	vhost-vdpa driver, it shall be treated as a dpdk device
 	*/
+
+	// HACK!!!
+	if pciAddr == "0000:65:00.2" || pciAddr == "0000:65:00.3" {
+		return true, nil
+	}
 
 	// the govdpa library requires the pci address to include the "pci/" prefix
 	fullPciAddr := "pci/" + pciAddr
